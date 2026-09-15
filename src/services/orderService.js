@@ -2,9 +2,13 @@ const prisma = require('../lib/prisma');
 const { serviceRequest } = require('../lib/serviceClient');
 const { AppError } = require('../lib/errors');
 
-const CART_SERVICE_URL = process.env.CART_SERVICE_URL || 'http://localhost:4004';
-const PRODUCT_SERVICE_URL = process.env.PRODUCT_SERVICE_URL || 'http://localhost:4003';
-const PAYMENT_SERVICE_URL = process.env.PAYMENT_SERVICE_URL || 'http://localhost:4006';
+// Base URLs without a trailing slash: "https://x.vercel.app/" + "/api/…" would
+// become "//api/…", which Express doesn't route (404).
+const baseUrl = (value, fallback) => (value || fallback).trim().replace(/\/+$/, '');
+
+const CART_SERVICE_URL = baseUrl(process.env.CART_SERVICE_URL, 'http://localhost:4004');
+const PRODUCT_SERVICE_URL = baseUrl(process.env.PRODUCT_SERVICE_URL, 'http://localhost:4003');
+const PAYMENT_SERVICE_URL = baseUrl(process.env.PAYMENT_SERVICE_URL, 'http://localhost:4006');
 
 const CART_INTERNAL_KEY = process.env.CART_INTERNAL_KEY || 'change-me-cart-internal';
 const PRODUCT_INTERNAL_KEY = process.env.PRODUCT_INTERNAL_KEY || 'change-me-product-internal';

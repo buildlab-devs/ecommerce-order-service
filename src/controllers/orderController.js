@@ -52,10 +52,6 @@ async function updatePaymentStatus(req, res, next) {
   }
 }
 
-async function health(_req, res) {
-  res.json({ success: true, service: 'order-service', status: 'ok' });
-}
-
 module.exports = {
   orderIdSchema,
   paymentStatusSchema,
@@ -63,5 +59,4 @@ module.exports = {
   list,
   getById,
   updatePaymentStatus,
-  health,
 };
