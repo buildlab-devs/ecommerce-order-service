@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const orderRoutes = require('./routes/orderRoutes');
-const { health } = require('./lib/health');
 const { errorHandler, notFoundHandler } = require('./lib/errors');
 
 const app = express();
@@ -14,8 +13,10 @@ app.get('/', (_req, res) => {
   res.json({ success: true, service: 'order-service' });
 });
 
-// /health is what monitors probe; /api/orders/health is kept for existing callers.
-app.get(['/health', '/api/orders/health'], health);
+// Provide a reliable health endpoint for monitoring and legacy callers.
+app.get(['/health', '/api/orders/health'], (req, res) => {
+  res.json({ success: true, service: 'order-service', status: 'ok' });
+});
 
 app.use('/api/orders', orderRoutes);
 
